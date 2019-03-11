@@ -4,16 +4,16 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import java.lang.ref.WeakReference
 
 abstract class ASemiMVPPresenter<V>(view: V) : LifecycleObserver {
     private val TAG = "ASemiMVPPresenter"
 
-    private var weakView: WeakReference<V> = WeakReference(view)
-    protected var view: V? = weakView.get()
+    protected var view: V? = view
         get() {
-            if (field == null) Log.w(TAG, "View reference in your presenter is null. Review your code if you call" +
-                    "view function when it has been release by GC")
+            if (field == null) Log.w(
+                TAG, "View reference in your presenter is null. Review your code if you call" +
+                        "view function when it has been release by GC"
+            )
             return field
         }
 
@@ -35,7 +35,7 @@ abstract class ASemiMVPPresenter<V>(view: V) : LifecycleObserver {
      */
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     open fun onViewDestroyed() {
-        weakView.clear()
+        view = null
     }
 
 }
